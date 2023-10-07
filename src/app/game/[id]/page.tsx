@@ -4,13 +4,57 @@ import Image from "next/image"
 import { redirect } from "next/navigation"
 import { Label } from "./components/label"
 import { GameCard } from "@/components/GameCard"
+import { Metadata } from "next"
 
+interface PropsParams {
+    params: {
+      id: string;
+    }
+  }
+
+  export async function generateMetadata({ params }: PropsParams): Promise<Metadata> {
+    try {
+      const response: GameProps = await fetch(`${process.env.NEXT_API_URL}/next-api/?api=game&id=${params.id}`, { next: { revalidate: 60 } })
+        .then((res) => res.json())
+        .catch(() => {
+          return {
+            title: "GazetaGames - Descubra jogos incríveis para se divertir."
+          }
+        })
+  
+      return {
+        title: response.title,
+        description: `${response.description.slice(0, 100)}...`,
+        openGraph: {
+          title: response.title,
+          images: [response.image_url]
+        },
+        robots: {
+          index: true,
+          follow: true,
+          nocache: true,
+          googleBot: {
+            index: true,
+            follow: true,
+            noimageindex: true,
+          }
+        }
+      }
+  
+  
+  
+    } catch (err) {
+      return {
+        title: "GazetaGames - Descubra jogos incríveis para se divertir."
+      }
+    }
+  }
+  
 
 async function getData(id: string) {
 
-
     try {
-        const res = await fetch(`${process.env.NEXT_API_URL}/next-api/?api=game&id=${id}`)
+        const res = await fetch(`${process.env.NEXT_API_URL}/next-api/?api=game&id=${id}`, { next: { revalidate: 120 } })
         return res.json()
     } catch (err) {
         throw new Error('Failed to fetch data')
@@ -19,7 +63,7 @@ async function getData(id: string) {
 
 async function getRandomGame() {
     try {
-        const res = await fetch(`${process.env.NEXT_API_URL}/next-api/?api=game_day`)
+        const res = await fetch(`${process.env.NEXT_API_URL}/next-api/?api=game_day`, { cache: 'no-store' })
         return res.json()
     } catch (err) {
         throw new Error(`Failed to fetch data..: ${err}`)
@@ -66,9 +110,7 @@ export default async function Game({
                 <h2 className="font-bold text-lg mt-7 mb-2">Jogo Recomendado</h2>
                 <div>
                     <div>
-                        <GameCard
-                            data={randomGames}
-                        />
+                        <GameCard data={randomGames}/>
                     </div>
                 </div>
             </Container>
