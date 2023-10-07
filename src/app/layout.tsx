@@ -10,7 +10,7 @@ export const metadata: Metadata = {
   description: 'Pesquisa de Jogos em uma API',
   keywords: ['games', 'jogos', 'steam', 'epicgames'],
   openGraph: {
-    images: ''
+    images: '/_next/static/media/logo.d1c74465.svg'
   },
   robots: {
     index: true,
