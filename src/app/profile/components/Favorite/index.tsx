@@ -27,7 +27,7 @@ export function FavoritCard() {
                         type='text'
                         value={input}
                         onChange={(e) => setInput(e.target.value)}
-                        onBlur={handleButton}
+                        
                     />
 
                     {!input ? (
