@@ -5,17 +5,14 @@ import { FiEdit, FiX, FiPlus } from 'react-icons/fi'
 export function FavoritCard() {
     const [input, setInput] = useState("")
     const [showInput, setShowInput] = useState(false)
-    const [gameName, setGameName] = useState<string[]>([])
+    const [gameName, setGameName] = useState('')
 
 
     function handleButton() {
         setShowInput(!showInput)
 
         if (input !== '') {
-            let temp = gameName
-            temp.push(input + '\n')
-
-            setGameName(temp)
+            setGameName(input)
         }
 
         setInput('')
@@ -54,7 +51,7 @@ export function FavoritCard() {
             {gameName && (
                 <div>
                     <span className='text-headerbg'>Jogo Favorito:</span>
-                    <p className='font-bold text-headerbg'>{'\n' + '\t' + gameName}</p>
+                    <p className='font-bold text-headerbg'>{gameName}</p>
                 </div>
             )}
             {!gameName && (
